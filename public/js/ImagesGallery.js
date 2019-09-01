@@ -37,7 +37,6 @@ window.ImageGallery = (function () {
     _onUserSearch(ev) {
       ev.preventDefault();
       try { 
-
         this.search(this.seachInput.value, this.select.value);
       } catch (e) {
         this.search(this.seachInput.value, 'pixabay')
@@ -91,6 +90,8 @@ window.ImageGallery = (function () {
 
     _initViewFunctionality() {
       this.form.addEventListener("submit", this._onUserSearch.bind(this));
+      this.seachInput.addEventListener("input", this._onUserSearch.bind(this));
+      this.select.addEventListener("change", this._onUserSearch.bind(this));
     }
   }
 

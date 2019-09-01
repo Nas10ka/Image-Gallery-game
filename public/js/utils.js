@@ -11,12 +11,14 @@ const getFetchUrl = (params) => {
   return fetchUrl;
 }
 
-
 const pixabayCall = (params) =>
   fetch(getFetchUrl(params))
   .then(response => response.json())
-  .then(data => {
-    console.log('data ', data);
-    return data.hits;
-  })
+  .then(data => data.hits)
   .catch(e => { throw new Error(e.message) });
+
+const pixabayParams = q => ({
+  q,
+  image_type: 'all', 
+  per_page: 100
+});
