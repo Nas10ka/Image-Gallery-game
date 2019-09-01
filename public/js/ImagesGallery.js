@@ -1,4 +1,5 @@
 window.ImageGallery = (function () {
+  
   class ImageGallery {
     /**
      * @constructor
@@ -13,18 +14,19 @@ window.ImageGallery = (function () {
     /**
      * @param {String} query
      */
+
+    asyncSearchRequest = (...params) => {
+      return Promise.resolve(this.getResult(...params))
+        .then(searchResults => this._onReceiveSearchResult(searchResults));
+    }
+
+    getResult = (...params) => this.imagesResolver.search(...params)
+
     search(query, searchModuleId) {
-      console.log(searchModuleId);
-      if(searchModuleId !== 'local') {
-        throw new Error('module id is unknown');
+      if(!searchModules.includes(searchModuleId)) {
+        throw Error('module id is unknown');
       }   
-      try {
-        const searchResults = this.imagesResolver.search(query, searchModuleId);
-        this._onReceiveSearchResult(searchResults);
-      } catch (e) {
-        const searchResults = this.imagesResolver.search(query);
-        this._onReceiveSearchResult(searchResults);
-      }
+      this.asyncSearchRequest(query, searchModuleId);
 
     }
 
@@ -34,7 +36,12 @@ window.ImageGallery = (function () {
 
     _onUserSearch(ev) {
       ev.preventDefault();
-      this.search(this.seachInput.value, this.searchModuleId);
+      try { 
+
+        this.search(this.seachInput.value, this.select.value);
+      } catch (e) {
+        this.search(this.seachInput.value, 'pixabay')
+      }
     }
 
     _onReceiveSearchResult(result) {
@@ -49,6 +56,7 @@ window.ImageGallery = (function () {
     }
 
     _initView() {
+
       this.container = document.createElement("div");
       this.container.className = "gallery";
 
@@ -64,6 +72,12 @@ window.ImageGallery = (function () {
       this.seachInput.className = "gallery__search form-control";
       this.seachInput.placeholder = "search by tag";
       this.formGroup.appendChild(this.seachInput);
+
+      this.select = document.createElement("select");
+      this.select.className = "gallery__search form-control";
+      searchModules.forEach(item =>
+        this.select.options[this.select.options.length] = new Option(item, item))
+      this.formGroup.appendChild(this.select);
 
       this.searchButton = document.createElement("button");
       this.searchButton.className = "gallery__button btn btn-primary";

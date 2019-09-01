@@ -29,7 +29,7 @@
 <script src="/js/local.db.js"></script>
 
 <!-- solutions  -->
-<script src="/js/task1_solution.js"></script>
+<script src="/js/utils.js"></script>
 
 <!-- run our code -->
 <script>
@@ -37,7 +37,7 @@
     const imageResolver = window.imageResolver = new window.ImagesResolver();
     const gallery = new window.ImageGallery(imageResolver);
     gallery.addToElement(document.querySelector(".js-container"));
-
+    
     window.initiateTest();
   };
 </script>
