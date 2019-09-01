@@ -13,9 +13,19 @@ window.ImageGallery = (function () {
     /**
      * @param {String} query
      */
-    search(query) {
-      const searchResults = this.imagesResolver.search(query);
-      this._onReceiveSearchResult(searchResults);
+    search(query, searchModuleId) {
+      console.log(searchModuleId);
+      if(searchModuleId !== 'local') {
+        throw new Error('module id is unknown');
+      }   
+      try {
+        const searchResults = this.imagesResolver.search(query, searchModuleId);
+        this._onReceiveSearchResult(searchResults);
+      } catch (e) {
+        const searchResults = this.imagesResolver.search(query);
+        this._onReceiveSearchResult(searchResults);
+      }
+
     }
 
     addToElement(element) {
@@ -24,7 +34,7 @@ window.ImageGallery = (function () {
 
     _onUserSearch(ev) {
       ev.preventDefault();
-      this.search(this.seachInput.value);
+      this.search(this.seachInput.value, this.searchModuleId);
     }
 
     _onReceiveSearchResult(result) {

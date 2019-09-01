@@ -15,9 +15,9 @@ window.ImagesResolver = (function () {
       ];
     }
 
-    search(query){
-      // if(searchModuleId) {
+    search(query, searchModuleId){
         let images = [];
+        const searchModule = searchModuleId || 'local';
         const reducer = (item) => {
           const tags = item.tags.split(',').map(i => i.trim());
           if(tags.includes(query)) {
@@ -34,11 +34,9 @@ window.ImagesResolver = (function () {
         return {
           query, images
         };
-      // } else {
-      //   throw Error('module id is unknown');
-      // }
     }
   }
 
   return ImagesResolver;
 })();
+
